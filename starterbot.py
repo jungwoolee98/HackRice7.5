@@ -68,13 +68,13 @@ def constructDateTime(input):
             if item in elements[0]:
                 month = int(elements[0].split(item)[0])
                 day = int(elements[0].split(item)[1])
-    try:
-        datentime = datetime(2018, month, day, hour)
-        date,time = str(datentime.month) + "-" + str(datentime.day), str(datentime.hour)
     if hour == 24:
         hour -= 12
     elif hour == 12 and am == True:
         hour -= 12
+    try:
+        datentime = datetime(2018, month, day, hour)
+        date,time = str(datentime.month) + "-" + str(datentime.day), str(datentime.hour)
     except ValueError as e:
         #Jungwoo tell them to learn how to fucking tell time
         print "learn how to tell time"
@@ -231,14 +231,30 @@ def handle_command(command, channel, real_user):
         "conversations.list",
         types="public_channel, private_channel")['channels']"""
     # This is where you start to implement more commands!
-    if command.startswith(EXAMPLE_COMMAND):
-        response = "Sure...write some more code then I can do that!"
+    help_message = "type commands in this format: \n" \
+              "uber to [destination] [date] [time]\n" \
+              "Acceptible date formats (using April 28 as our example):\n" \
+              "April 22\n" \
+              "apr 22\n" \
+              "4/22\n" \
+              "4-22\n" \
+              "Acceptible time formats (using 1:00 pm as our example)\n" \
+              "13\n" \
+              "13:00\n" \
+              "1 pm\n" \
+              "1 P.M.\n" \
+              "1:00 pm\n" \
+              "Nothing is case sensitive, only the hour is needed \n" \
+              "Please put a space between the hour and am/pm(7pm is not acceptible)"
+
+    if command.startswith("help"):
+        
 
         # Sends the response back to the channel
         slack_client.api_call(
             "chat.postMessage",
             channel=channel,
-            text=response or default_response
+            text=help_message
         )
     elif command.startswith("uber to hobby"):
         response = "Testing uber to hobby"
@@ -267,7 +283,7 @@ def handle_command(command, channel, real_user):
     	slack_client.api_call(
     		"chat.postMessage",
     		channel = channel,
-    		text="Hey do you want to see me naked.")
+    		text=help_message)
 
 
 
